@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form action="" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <table class="table table-sm">
+  {{ form.as_table }}
+  <tr>
+    <th><label for="id_tags">標籤</label></th>
+    <td>
+      <select id="id_tags" name="tags" class="form-control">
+        <option value="">-- 選擇標籤 --</option>
+        {% for tag in tags %}
+          <option value="{{ tag.id }}">{{ tag.subject }}</option>
+        {% endfor %}
+      </select>
+    </td>
+  </tr>
+  </table>
+  <input class="btn btn-primary" type="submit" value="送出" />   
+</form>
+<script>
+// 取得表格內的所有輸入元件(<input>與<textarea>)
+var inputs = document.querySelectorAll('table input, table textarea');
+inputs.forEach(function(item) {
+// 為每一個輸入元件新增套用 form-control 類別
+  item.classList.add('form-control');
+    });
+</script>
+{% endblock %}

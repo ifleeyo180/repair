@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>確定要刪除此報修項目嗎？</h2>
+    <form method="post">
+        {% csrf_token %}
+        <input class="btn btn-danger" type="submit" value="確定刪除">
+        <a href="{% url 'log_list' %}" class="btn btn-secondary">取消</a>
+    </form>
+{% endblock %}

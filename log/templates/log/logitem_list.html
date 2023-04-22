@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="GET" class="mb-3">
+    <div class="input-group">
+      <input type="search" name="search" class="form-control" placeholder="搜尋報修主旨、報修人、處理人員或標籤" value="{{ request.GET.search }}">
+      <button type="submit" class="btn btn-primary">搜尋</button>
+    </div>
+  </form>
+<table class="table table-sm table-hover">
+    <thead>
+        <tr>
+            <th>報修時間</th>
+            <th>報修主旨</th>
+            <th>報修人</th>
+            <th>狀態</th>
+            <th>標籤</th> <!-- 新增標籤欄位標題 -->
+            <th>最後更新時間</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in logitem_list  %}
+        <tr>
+            <td>{{ item.ctime }}</td>
+            <td>
+                <a href="{{ item.id}}">{{ item.subject }}</a>
+            </td>
+            <td>{{ item.reporter }}</td>
+            <td>
+                <span class="badge badge-{{ item.get_status_class }}">
+                    {{ item.get_status_display }}
+                </span>
+            </td>
+            <td> <!-- 新增標籤欄位內容 -->
+                {% for tag in item.tags.all %}
+                    <span class="badge badge-info">{{ tag.subject }}</span>
+                {% empty %}
+                    <em>無標籤</em>
+                {% endfor %}
+            </td>
+            <td>{{ item.utime }}</td>
+            <td> <!-- 新增操作欄位內容，包括刪除按鈕 -->
+                {% if is_superuser %}
+                    <a href="{% url 'log_delete' item.id %}" class="btn btn-danger btn-sm">刪除</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% include 'pagination.html' %}
+{% endblock %}
