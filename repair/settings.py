@@ -89,7 +89,8 @@ WSGI_APPLICATION = 'repair.wsgi.application'
 #     }
 # }
 
-# Local
+# Local PostgreSQL database
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
