@@ -10,8 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
+import dj_database_url
 from pathlib import Path
 from dotenv import load_dotenv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -87,6 +89,8 @@ WSGI_APPLICATION = 'repair.wsgi.application'
 #     }
 # }
 
+# Local PostgreSQL database
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -97,6 +101,11 @@ DATABASES = {
         'PORT': '5432'
     }
 }
+
+# Render.io
+# DATABASES = {
+#     'default': dj_database_url.config(default=os.environ.get('postgres://repair_db_user:z7rcYdEQ1qDNkn0trFdgOGGn8moR4iaX@dpg-ch2bc3bh4hsum45s8ssg-a/repair_db'))
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
