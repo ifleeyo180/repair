@@ -6,4 +6,5 @@ whitenoise
 dj-database-url==0.5.0
 Pillow
 django-ninja
+django-cors-headers
 

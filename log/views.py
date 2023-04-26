@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import LogItem, Tag
 from .forms import LogItemForm
 from django.db.models import Q
+from django.shortcuts import render
 
 # Create your views here.
 # 報修項目列表
@@ -58,7 +59,7 @@ class LogCreate(CreateView):
   fields = ['subject', 'description', 'reporter', 'phone', 'picture']
 
   def get_success_url(self):
-    return reverse('log_list')
+     return reverse('log_list')
   
   def get_context_data(self, **kwargs):
      context = super().get_context_data(**kwargs)
@@ -81,7 +82,7 @@ class LogReply(LoginRequiredMixin, UpdateView):
   template_name = 'log/logitem_detail.html'
 
   def get_success_url(self):
-    return reverse('log_view', kwargs={'pk': self.object.id})
+     return reverse('log_view', kwargs={'pk': self.object.id})
   
   # get_initial: 設定表單初始預設值
   def get_initial(self):
@@ -90,11 +91,10 @@ class LogReply(LoginRequiredMixin, UpdateView):
     u = self.request.user
     # 如果有名字，就填名字，否則就填帳號名稱
     if u.first_name:
-      data['handler'] = u.first_name
+        data['handler'] = u.first_name
     else:
-      data['handler'] = u.username
+        data['handler'] = u.username
     return data
-  
 
 class LogDelete(LoginRequiredMixin, DeleteView):
    model = LogItem
@@ -106,3 +106,8 @@ class LogDelete(LoginRequiredMixin, DeleteView):
    def handle_no_permission(self):
       messages.error(self.request, '您沒有刪除報修項目的權限。')
       return HttpResponseRedirect(reverse('log_list'))
+   
+
+
+def index(request):
+    return render(request, 'log/logitem_list.html')
