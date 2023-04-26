@@ -60,8 +60,10 @@
     async function fetchLogItems() {
       try {
         const response = await fetch(`${API_HOST}/api/logitems`);
-        const logItems = await response.json();
-  
+        let logItems = await response.json();
+            logItems = logItems.sort((a, b) => b.id - a.id);
+
+
         let tbodyContent = '';
   
         for (const item of logItems) {
