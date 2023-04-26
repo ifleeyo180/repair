@@ -4,7 +4,7 @@ from .models import Tag, LogItem
 from django.db.models import Q
 
 
-api = NinjaAPI()
+api = NinjaAPI(csrf=True)
 class TagSchema(Schema):
     subject: str
     Rstyle: str
