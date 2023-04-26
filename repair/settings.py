@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'staff',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -56,6 +57,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'repair.urls'
@@ -91,21 +94,21 @@ WSGI_APPLICATION = 'repair.wsgi.application'
 
 # Local PostgreSQL database
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'repair_db',
-#         'USER': 'postgres',
-#         'PASSWORD': 'toor',
-#         'HOST': 'localhost',
-#         'PORT': '5432'
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'repair_db',
+        'USER': 'postgres',
+        'PASSWORD': 'toor',
+        'HOST': 'localhost',
+        'PORT': '5432'
+    }
+}
 
 # Render.io
-DATABASES = {
-    'default': dj_database_url.config(default=os.environ.get('postgres://repair_db_user:z7rcYdEQ1qDNkn0trFdgOGGn8moR4iaX@dpg-ch2bc3bh4hsum45s8ssg-a/repair_db'))
-}
+# DATABASES = {
+#     'default': dj_database_url.config(default=os.environ.get('postgres://repair_db_user:z7rcYdEQ1qDNkn0trFdgOGGn8moR4iaX@dpg-ch2bc3bh4hsum45s8ssg-a/repair_db'))
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -163,3 +166,11 @@ if os.getenv('DEBUG') == 'False':
     DEBUG = False
 else:
     DEBUG = True
+
+
+CORS_ALLOW_CREDENTIALS = True
+CSRF_TRUSTED_ORIGINS = [
+    "0.0.0.0:8000",
+    "localhost:8000",
+    "127.0.0.1:8000",
+]
