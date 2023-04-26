@@ -94,24 +94,24 @@ WSGI_APPLICATION = 'repair.wsgi.application'
 
 # Local PostgreSQL database
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'repair_db',
-        'USER': 'postgres',
-        'PASSWORD': 'toor',
-        'HOST': 'localhost',
-        'PORT': '5432'
-    }
-}
-
-# Render.io
 # DATABASES = {
-#     'default': dj_database_url.config(default=os.environ.get('postgres://repair_db_user:z7rcYdEQ1qDNkn0trFdgOGGn8moR4iaX@dpg-ch2bc3bh4hsum45s8ssg-a/repair_db'))
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'repair_db',
+#         'USER': 'postgres',
+#         'PASSWORD': 'toor',
+#         'HOST': 'localhost',
+#         'PORT': '5432'
+#     }
 # }
 
-# Password validation
-# https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
+# Render.io
+DATABASES = {
+    'default': dj_database_url.config(default=os.environ.get('postgres://repair_db_user:z7rcYdEQ1qDNkn0trFdgOGGn8moR4iaX@dpg-ch2bc3bh4hsum45s8ssg-a/repair_db'))
+}
+
+Password validation
+https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
