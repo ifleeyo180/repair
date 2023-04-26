@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form method="GET" class="mb-3">
+<form method="GET" class="mb-3" id="search-form">
     <div class="input-group">
       <input type="search" name="search" class="form-control" placeholder="搜尋報修主旨、報修人、處理人員或標籤" value="{{ request.GET.search }}">
       <button type="submit" class="btn btn-primary">搜尋</button>
@@ -10,6 +10,7 @@
 <table class="table table-sm table-hover">
     <thead>
         <tr>
+            <th>編號</th>
             <th>報修時間</th>
             <th>報修主旨</th>
             <th>報修人</th>
@@ -18,9 +19,10 @@
             <th>最後更新時間</th>
         </tr>
     </thead>
-    <tbody>
-        {% for item in logitem_list  %}
+    <tbody id="logitem-tbody">
+        <!-- {% for item in logitem_list  %}
         <tr>
+            <td>{{ item.pk }}</td>
             <td>{{ item.ctime }}</td>
             <td>
                 <a href="{{ item.id}}">{{ item.subject }}</a>
@@ -31,7 +33,7 @@
                     {{ item.get_status_display }}
                 </span>
             </td>
-            <td> <!-- 新增標籤欄位內容 -->
+            <td> 
                 {% for tag in item.tags.all %}
                     <span class="badge badge-info">{{ tag.subject }}</span>
                 {% empty %}
@@ -39,14 +41,63 @@
                 {% endfor %}
             </td>
             <td>{{ item.utime }}</td>
-            <td> <!-- 新增操作欄位內容，包括刪除按鈕 -->
+            <td>
                 {% if is_superuser %}
                     <a href="{% url 'log_delete' item.id %}" class="btn btn-danger btn-sm">刪除</a>
                 {% endif %}
             </td>
         </tr>
-        {% endfor %}
+        {% endfor %} -->
     </tbody>
 </table>
 {% include 'pagination.html' %}
+{% endblock %}
+
+{% block custom_script %}
+<script>
+    const API_HOST = window.location.protocol + "//" + window.location.host;
+  
+    async function fetchLogItems() {
+      try {
+        const response = await fetch(`${API_HOST}/api/logitems`);
+        let logItems = await response.json();
+            logItems = logItems.sort((a, b) => b.id - a.id);
+
+
+        let tbodyContent = '';
+  
+        for (const item of logItems) {
+          let tags = item.tags.map(tag => `<span class="badge badge-info">${tag.subject}</span>`).join(' ');
+          tags = tags || '<em>無標籤</em>';
+  
+          let status = `<span class="badge badge-${item.status_class}">${item.status_display}</span>`;
+
+          let deleteButton = '';
+    if ({{ request.user.is_superuser|yesno:"true,false" }}) {
+        deleteButton = `<a href="/log/${item.id}/delete/" class="btn btn-danger btn-sm">刪除</a>`;
+      }
+  
+          tbodyContent += `
+            <tr>
+              <td>${item.id}</td>
+              <td>${item.ctime}</td>
+              <td><a href="${item.id}">${item.subject}</a></td>
+              <td>${item.reporter}</td>
+              <td>${status}</td>
+              <td>${tags}</td>
+              <td>${item.utime}</td>
+              <td>${deleteButton}</td>
+            </tr>
+          `;
+        }
+  
+        document.querySelector('#logitem-tbody').innerHTML = tbodyContent;
+      } catch (error) {
+        console.error("Error fetching log items:", error);
+      }
+    }
+  
+    fetchLogItems();
+  </script>
+  
 {% endblock %}
