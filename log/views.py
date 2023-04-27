@@ -9,6 +9,7 @@ from django.shortcuts import render
 
 # Create your views here.
 # 報修項目列表
+'''
 class LogList(UserPassesTestMixin, ListView):
   model = LogItem
   ordering = ['-id']
@@ -47,7 +48,8 @@ class LogList(UserPassesTestMixin, ListView):
 
   def test_func(self):
       return self.request.user.is_authenticated
-
+'''
+      
 # 檢視報修項目
 class LogView(DetailView):
   model = LogItem
