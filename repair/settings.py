@@ -110,8 +110,8 @@ DATABASES = {
 #     'default': dj_database_url.config(default=os.environ.get('postgres://repair_db_user:z7rcYdEQ1qDNkn0trFdgOGGn8moR4iaX@dpg-ch2bc3bh4hsum45s8ssg-a/repair_db'))
 # }
 
-# Password validation
-# https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
+    # Password validation
+    # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
