@@ -20,34 +20,6 @@
         </tr>
     </thead>
     <tbody id="logitem-tbody">
-        <!-- {% for item in logitem_list  %}
-        <tr>
-            <td>{{ item.pk }}</td>
-            <td>{{ item.ctime }}</td>
-            <td>
-                <a href="{{ item.id}}">{{ item.subject }}</a>
-            </td>
-            <td>{{ item.reporter }}</td>
-            <td>
-                <span class="badge badge-{{ item.get_status_class }}">
-                    {{ item.get_status_display }}
-                </span>
-            </td>
-            <td> 
-                {% for tag in item.tags.all %}
-                    <span class="badge badge-info">{{ tag.subject }}</span>
-                {% empty %}
-                    <em>無標籤</em>
-                {% endfor %}
-            </td>
-            <td>{{ item.utime }}</td>
-            <td>
-                {% if is_superuser %}
-                    <a href="{% url 'log_delete' item.id %}" class="btn btn-danger btn-sm">刪除</a>
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %} -->
     </tbody>
 </table>
 {% include 'pagination.html' %}
@@ -59,7 +31,10 @@
   
     async function fetchLogItems() {
       try {
-        const response = await fetch(`${API_HOST}/api/logitems`);
+        const urlParams = new URLSearchParams(window.location.search);
+        const searchQuery = urlParams.get('search') || '';
+
+        const response = await fetch(`${API_HOST}/api/logitems?search=${encodeURIComponent(searchQuery)}`);
         let logItems = await response.json();
             logItems = logItems.sort((a, b) => b.id - a.id);
 
