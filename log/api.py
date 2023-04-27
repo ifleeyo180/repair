@@ -57,6 +57,23 @@ def tags(request):
 @api.get("logitems", response=List[LogItemSchema])
 def logitems(request):
     logitems = LogItem.objects.all()
+    search_query = request.GET.get('search', '')
+    if search_query:
+        # Check if the search query can be converted to an integer
+        try:
+            search_query_int = int(search_query)
+            int_filter = Q(id=search_query_int)
+        except ValueError:
+            int_filter = Q()
+
+        # Apply the filter to the queryset using the Q object
+        logitems = logitems.filter(
+            Q(subject__icontains=search_query) |
+            Q(reporter__icontains=search_query) |
+            Q(handler__icontains=search_query) |
+            Q(tags__subject__icontains=search_query) |
+            int_filter
+        ).distinct()
     return [logitem_to_schema(logitem) for logitem in logitems]
 
 
