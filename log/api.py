@@ -2,16 +2,22 @@ from typing import List, Optional
 from ninja import NinjaAPI, Schema
 from .models import Tag, LogItem
 from django.db.models import Q
-
+from ninja.security import django_auth
 
 api = NinjaAPI(csrf=True)
+
+
+<<<<<<< HEAD
+api = NinjaAPI(csrf=True)
+=======
+>>>>>>> release/RELEASE
 class TagSchema(Schema):
     subject: str
     Rstyle: str
 
 
 class LogItemSchema(Schema):
-    id:int
+    id: int
     ctime: str
     subject: str
     description: str
@@ -42,10 +48,9 @@ def logitem_to_schema(logitem: LogItem) -> LogItemSchema:
         utime=logitem.utime.strftime('%Y-%m-%d %H:%M:%S'),
         comment=logitem.comment,
         picture=logitem.picture.url if logitem.picture else None,
-        tags=[TagSchema(subject=tag.subject, Rstyle=tag.Rstyle) for tag in logitem.tags.all()],
+        tags=[TagSchema(subject=tag.subject, Rstyle=tag.Rstyle)
+              for tag in logitem.tags.all()],
     )
-
-
 
 
 @api.get("tags", response=List[TagSchema])
@@ -54,7 +59,7 @@ def tags(request):
     return [TagSchema(subject=tag.subject, Rstyle=tag.Rstyle) for tag in Tag.objects.all()]
 
 
-@api.get("logitems", response=List[LogItemSchema])
+@api.get("logitems", response=List[LogItemSchema], auth=django_auth)
 def logitems(request):
     logitems = LogItem.objects.all()
     search_query = request.GET.get('search', '')
@@ -75,5 +80,3 @@ def logitems(request):
             int_filter
         ).distinct()
     return [logitem_to_schema(logitem) for logitem in logitems]
-
-
