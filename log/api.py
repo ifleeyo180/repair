@@ -7,10 +7,6 @@ from ninja.security import django_auth
 api = NinjaAPI(csrf=True)
 
 
-<<<<<<< HEAD
-api = NinjaAPI(csrf=True)
-=======
->>>>>>> release/RELEASE
 class TagSchema(Schema):
     subject: str
     Rstyle: str
