@@ -13,6 +13,20 @@ import os
 import dj_database_url
 from pathlib import Path
 from dotenv import load_dotenv
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+
+SENTRY_CLIENT_DSN = os.getenv('SENTRY_CLIENT_DSN')
+sentry_sdk.init(
+    dsn=SENTRY_CLIENT_DSN,
+    integrations=[
+        DjangoIntegration(),
+    ],
+
+    traces_sample_rate=0.01,
+    send_default_pii=True
+)
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -28,10 +42,10 @@ SECRET_KEY = 'django-insecure-jsvw^)zivifu44zw%s32n6an8r_1p)51u6)p8@13ts_wl4d^og
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
 
-ALLOWED_HOSTS = ['render-tutorial.onrender.com', 'repair-bo3k.onrender.com', '*']
+ALLOWED_HOSTS = ['render-tutorial.onrender.com',
+                 'repair-bo3k.onrender.com', '*']
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
 
 
 # Application definition
@@ -110,8 +124,8 @@ DATABASES = {
     'default': dj_database_url.config(default=os.environ.get('postgres://repair_db_user:z7rcYdEQ1qDNkn0trFdgOGGn8moR4iaX@dpg-ch2bc3bh4hsum45s8ssg-a/repair_db'))
 }
 
-    # Password validation
-    # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
+# Password validation
+# https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -160,7 +174,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-load_dotenv(Path.joinpath(BASE_DIR, '.env'))  # take environment variables from .env.
+# take environment variables from .env.
+load_dotenv(Path.joinpath(BASE_DIR, '.env'))
 if os.getenv('DEBUG') == 'False':
     # SECURITY WARNING: don't run with debug turned on in production!
     DEBUG = False
